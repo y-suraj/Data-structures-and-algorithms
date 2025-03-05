@@ -9,7 +9,7 @@
 
 void selection_sort(int arr[], int n) {
 	for (int i = 0; i <= n - 2; i++) {
-		int mini = arr[i], min_id = i;
+		int min_id = i;
 
 		for (int j = i; j <= n - 1; j++) {
 			if (arr[j] < arr[min_id]) {
@@ -31,14 +31,14 @@ void selection_sort(int arr[], int n) {
 
 void bubble_sort(int arr[], int n) {
 	for (int i = 0; i < n - 1; i++) {
-		int didSwap = 0;
+		bool didSwap = false;
 		for (int j = 0; j < n - i - 1; j++) {
 			if (arr[j] > arr[j + 1]) {
 				swap(arr[j], arr[j + 1]);
-				didSwap = 1;
+				didSwap = true;
 			}
 		}
-		if (didSwap == 0) break;
+		if (!didSwap) break;
 	}
 }
 // TC: O(n + (n-1) + (n-2) + (n-3) +...+ 2)
