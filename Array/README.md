@@ -23,6 +23,43 @@ public:
 	}
 };
 ```
+<br>Better:
+```cpp
+class Solution {
+   public:
+    int secondLargestElement(vector<int>& nums) {
+        // calculate the size of vector
+        int n = nums.size();
+
+        /*Initialize variables to store the
+        largest and second largest elements*/
+        int largest = INT_MIN;
+        int secondLargest = INT_MIN;
+
+        /* Single traversal to find the
+        largest and second largest elements*/
+        for (int i = 0; i < n; i++) {
+            int current = nums[i];
+
+            // if current element is found the largest
+            if (current > largest) {
+                // assign the previous largest element as the second largest
+                // element
+                secondLargest = largest;
+                // assign the current element as the largest element
+                largest = current;
+            }
+            // if any element found greater that second largest, but
+            // less than or equals to the largest element
+            else if (current > secondLargest && current < largest) {
+                // assign current to the secondLargest
+                secondLargest = current;
+            }
+        }
+        return secondLargest == INT_MIN ? -1 : secondLargest;
+    }
+};
+```
 
 ## [Find the Union](https://www.codingninjas.com/studio/problems/sorted-array_6613259)
 Solution 1:
