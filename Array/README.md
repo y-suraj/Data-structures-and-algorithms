@@ -122,4 +122,23 @@ int longestSubarrayWithSumK(vector<int> a, long long k) {
 ```
 Reference: [Longest Subarray with given Sum K(Positives)](https://takeuforward.org/data-structure/longest-subarray-with-given-sum-k/)
 
+## [Move Zero's to End](https://www.naukri.com/code360/problems/ninja-and-the-zero-s_6581958)
+**Problem Statement**: You are given an array of integers, your task is to move all the zeros in the array to the end of the array and move non-negative integers to the front by maintaining their order.
+```cpp
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int n = nums.size();
+        int zeroNum = 0;
 
+        for(int i=0; i<n; i++) {
+            if(nums[i] != 0) {
+                swap(nums[i], nums[zeroNum]);
+                zeroNum++;
+            }
+
+        }
+    }
+};
+```
+Reference: [Move all Zeros to the end of the array](https://takeuforward.org/data-structure/move-all-zeros-to-the-end-of-the-array/)
