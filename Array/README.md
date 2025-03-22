@@ -463,7 +463,7 @@ Solution:
 class Solution {
 public:
     void rotateMatrix(vector<vector<int>>& matrix) {
-        int n = matrix[0].size(); // length of one row
+        int n = matrix[0].size(); // length of one row/column
 
         // transpose the matrix
         for(int i=0; i<n; i++) {
