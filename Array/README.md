@@ -143,7 +143,7 @@ public:
 ```
 Reference: [Move all Zeros to the end of the array](https://takeuforward.org/data-structure/move-all-zeros-to-the-end-of-the-array/)
 
-## [Pascal's Triangle I]
+## [Pascal's Triangle I](https://leetcode.com/problems/pascals-triangle/)
 **Problem Statement**: You are given an array of integers, your task is to move all the zeros in the array to the end of the array and move non-negative integers to the front by maintaining their order.
 
 Given two integers r and c, return the value at the rth row and cth column in a Pascal's Triangle.
@@ -164,11 +164,8 @@ Output: 3
 Explanation: The Pascal's Triangle is as follows:
 
 1
-
 1 1
-
 1 2 1
-
 1 3 3 1
 
 ....
@@ -183,13 +180,9 @@ Output: 6
 Explanation: The Pascal's Triangle is as follows:
 
 1
-
 1 1
-
 1 2 1
-
 1 3 3 1
-
 1 4 6 4 1
 
 ....
@@ -228,6 +221,74 @@ private:
 
         // return the result
         return res;
+    }
+};
+```
+
+## [Pascal's Triangle II](https://leetcode.com/problems/pascals-triangle-ii/description/)
+**Problem Statement**: Given an integer r, return all the values in the rth row in Pascal's Triangle in correct order.
+
+
+In Pascal's triangle:
+
+- The first row has one element with a value of 1.
+- Each row has one more element in it than its previous row.
+- The value of each element is equal to the sum of the elements directly above it when arranged in a triangle format.
+
+Examples:
+```
+Input: r = 4
+
+Output: [1, 3, 3, 1]
+
+Explanation: The Pascal's Triangle is as follows:
+
+1
+1 1
+1 2 1
+1 3 3 1
+
+....
+
+Thus the 4th row is [1, 3, 3, 1]
+```
+```
+Input: r = 5
+
+Output: [1, 4, 6, 4, 1]
+
+Explanation: The Pascal's Triangle is as follows:
+
+1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+
+....
+
+Thus the 5th row is [1, 4, 6, 4, 1]
+```
+```
+Input: r = 6
+Output:
+[1, 5, 10, 10, 5, 1]
+```
+
+```cpp
+class Solution {
+public:
+    vector<int> pascalTriangleII(int r) {
+        vector<int> ans(r); // to store the answer
+        // set the first element of the row as 1
+        ans[0] = 1;
+
+        // compute each element in the rth row
+        for(int i=1; i<r; i++) {
+            ans[i] = (ans[i-1] * (r-i))/i;
+        }
+
+        return ans; // return the result
     }
 };
 ```
