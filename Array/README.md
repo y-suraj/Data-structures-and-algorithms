@@ -142,3 +142,94 @@ public:
 };
 ```
 Reference: [Move all Zeros to the end of the array](https://takeuforward.org/data-structure/move-all-zeros-to-the-end-of-the-array/)
+
+## [Pascal's Triangle I]
+**Problem Statement**: You are given an array of integers, your task is to move all the zeros in the array to the end of the array and move non-negative integers to the front by maintaining their order.
+
+Given two integers r and c, return the value at the rth row and cth column in a Pascal's Triangle.
+
+
+In Pascal's triangle:
+
+- The first row has one element with a value of 1.
+- Each row has one more element in it than its previous row.
+- The value of each element is equal to the sum of the elements directly above it when arranged in a triangle format.
+
+Examples:
+```
+Input: r = 4, c = 2
+
+Output: 3
+
+Explanation: The Pascal's Triangle is as follows:
+
+1
+
+1 1
+
+1 2 1
+
+1 3 3 1
+
+....
+
+Thus, value at row 4 and column 2 = 3
+```
+```
+Input: r = 5, c = 3
+
+Output: 6
+
+Explanation: The Pascal's Triangle is as follows:
+
+1
+
+1 1
+
+1 2 1
+
+1 3 3 1
+
+1 4 6 4 1
+
+....
+
+Thus, value at row 5 and column 3 = 6
+```
+```
+Input: r = 6, c = 2
+Output:
+5
+```
+
+```cpp
+class Solution {
+public:
+    int pascalTriangleI(int r, int c) {
+        // function to print the element in rth row and cth column
+        return nCr(r-1, c-1);
+        // note: for zero indexed problem, use nCr(r, c);
+    }
+private:
+    int nCr(int n, int r) {
+        // choose the smaller value for lesser interactions
+        r = min(r, n-r);
+
+        // base case
+        if(r==1) return n;
+
+        int res = 1;
+
+        // calculate nCr using iterative method avoiding overflow
+        for(int i=0; i<r; i++) {
+            res = res * (n-i);
+            res = res / (i+1);
+        }
+
+        // return the result
+        return res;
+    }
+};
+```
+
+
