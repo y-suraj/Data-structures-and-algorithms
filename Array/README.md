@@ -195,6 +195,13 @@ Output:
 5
 ```
 
+Constraints:
+```
+1 <= n <= 30
+All values will fit inside a 32-bit integer.
+```
+
+Solution 1:
 ```cpp
 class Solution {
 public:
@@ -275,6 +282,13 @@ Output:
 [1, 5, 10, 10, 5, 1]
 ```
 
+Constraints:
+```
+1 <= n <= 30
+All values will fit inside a 32-bit integer.
+```
+
+Solution 1:
 ```cpp
 class Solution {
 public:
@@ -289,6 +303,97 @@ public:
         }
 
         return ans; // return the result
+    }
+};
+```
+
+## [Pascal's Triangle III]
+**Problem Statement**: Given an integer n, return the first n rows of Pascal's triangle.
+
+
+In Pascal's triangle:
+
+- The first row has one element with a value of 1.
+- Each row has one more element in it than its previous row.
+- The value of each element is equal to the sum of the elements directly above it when arranged in a triangle format.
+
+Examples:
+```
+Input: n = 4
+
+Output: [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1]]
+
+Explanation: The Pascal's Triangle is as follows:
+
+1
+1 1
+1 2 1
+1 3 3 1
+
+1st Row has its value set to 1.
+
+All other cells take their value as the sum of the values directly above them
+```
+```
+Input: n = 5
+
+Output: [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]
+
+Explanation: The Pascal's Triangle is as follows:
+
+1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+
+1st Row has its value set to 1.
+
+All other cells take their value as the sum of the values directly above them
+```
+```
+Input: n = 3
+Output:
+[[1], [1, 1], [1, 2, 1]]
+```
+Constraints:
+```
+1 <= n <= 30
+All values will fit inside a 32-bit integer.
+```
+
+Solution 1:
+```cpp
+class Solution {
+   public:
+    vector<vector<int>> pascalTriangleIII(int numRows) {
+        vector<vector<int>> ans{{1}};  // to store the result
+        // to store the previous row for current row's elements
+        vector<int> prevRow;
+
+        // iterate through the number of rows
+        for (int row = 1; row <= numRows - 1; row++) {
+            ans.push_back(calculate_row_elements(prevRow, row));
+            prevRow =
+                ans[row];  // set prevRow as current for futher calculations
+        }
+        prevRow.clear();
+        return ans;
+    }
+
+   private:
+    vector<int> calculate_row_elements(vector<int>& prevRow, int row) {
+        // store 1 at the first position by default in the current row
+        vector<int> curRow(1, 1);
+        // Calculate element values based on the previous row
+        for (int col = 1; col <= row - 1; col++) {
+            // Calculate element value based on Pascal's triangle formula
+            curRow.push_back(prevRow[col - 1] + prevRow[col]);
+        }
+        // last element will be one in every row
+        curRow.push_back(1);
+        // return the current row
+        return curRow;
     }
 };
 ```
