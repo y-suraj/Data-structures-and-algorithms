@@ -478,3 +478,75 @@ public:
     }
 };
 ```
+
+## Two Sum
+**Problem Statement**: Given an array of integers nums and an integer target. Return the indices(0 - indexed) of two elements in nums such that they add up to target.
+
+Each input will have exactly one solution, and the same element cannot be used twice. Return the answer in non-decreasing order.
+
+Examples:
+```
+Input: nums = [1, 6, 2, 10, 3], target = 7
+Output: [0, 1]
+
+Explanation: nums[0] + nums[1] = 1 + 6 = 7
+```
+```
+Input: nums = [1, 3, 5, -7, 6, -3], target = 0
+Output: [1, 5]
+
+Explanation: nums[1] + nums[5] = 3 + (-3) = 0
+```
+```
+Input: nums = [-6, 7, 1, -7, 6, 2], target = 3
+Output:
+[2, 5]
+```
+
+Constraints:
+- 2 <= nums.length <= 105
+- -104 <= nums[i] <= 104
+- -105 <= target <= 105
+- Only one valid answer exists.
+
+
+Solution:
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        // size of the nums vector
+        int n = nums.size();
+        
+        // vector to store numbers with their indices
+        vector<vector<int>> eleIndex;
+        for(int i=0; i<n; i++) {
+            eleIndex.push_back({nums[i], i});
+        }
+
+        // sort by first element in ascending order
+        sort(eleIndex.begin(), eleIndex.end(), [](const vector<int>& a, const vector<int>& b) {
+            return a[0] < b[0];
+        });
+
+        /* two pointers: one starting 
+        from left and one from right*/
+        int left = 0, right = n - 1;
+
+        while(left < right) {
+            int currentSum = eleIndex[left][0] + eleIndex[right][0];
+            if(currentSum == target) {
+                // if indices found, return as a vector
+                return {eleIndex[left][1], eleIndex[right][1]};
+            }
+            else if(currentSum < target) {
+                left++;
+            }
+            else {
+                right--;
+            }
+        }
+        return {-1, -1};
+    }
+};
+```
