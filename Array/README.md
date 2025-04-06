@@ -550,3 +550,67 @@ public:
     }
 };
 ```
+
+## Majority Element-I
+
+Solution-1 (Better):
+```cpp
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int n = nums.size();
+
+        sort(nums.begin(), nums.end());
+
+        int majorityElement = nums[0];
+        int curMax = 1;
+
+        for(int i=1; i<n; i++) {
+            if(nums[i]==nums[i-1]) {
+                curMax++;
+            }
+            else {
+                curMax = 1;
+            }
+            if(curMax > n/2) {
+                majorityElement = nums[i];
+                break;
+            }
+        }
+        return majorityElement;
+    }
+};
+// TC: O(log N) +  O(N)
+// SC: O(1)
+```
+
+Solution-2 (Optimal):
+```cpp
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int n = nums.size();
+
+        int majorityElement;
+        int count = 0;
+
+        for(int i=0; i<n; i++) {
+            if(count==0) {
+                majorityElement = nums[i];
+                count = 1;
+            }
+            else if(nums[i]==majorityElement) {
+                count++;
+            } else {
+                count--;
+            }
+        }
+        return majorityElement;
+    }
+};
+// Time Complexity:The time complexity is O(n) due to  
+// the single for loop iterating through the input vector.
+
+// Space Complexity:The space complexity is O(1) because 
+// only a constant amount of extra space is used.
+```
