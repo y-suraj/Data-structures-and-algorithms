@@ -76,13 +76,18 @@ class Solution {
 
 
 /*
-Time Complexity: O(N) + O(2xN) ~ O(3xN), where N is the size of the array. The function takes O(N) to insert all elements into the set data structure. After that, for every starting element, we find the consecutive elements. Although nested loops are used, the set will be traversed at most twice in the worst case. Therefore, the time complexity is O(2xN) instead of O(N2).
+Time Complexity: O(N) + O(2xN) ~ O(3xN), where N is the size of the array. 
+The function takes O(N) to insert all elements into the set data structure. 
+After that, for every starting element, we find the consecutive elements. 
+Although nested loops are used, the set will be traversed at most twice in the worst case. 
+Therefore, the time complexity is O(2xN) instead of O(N2).
 
 Space Complexity: O(N), as we use a set data structure to solve this problem.
 
 Note: The time complexity assumes that we use an unordered_set, which has O(1) time complexity for set operations.
 
-In the worst case, if the set operations take O(N), the total time complexity would be approximately O(N2). If we use a set instead of an unordered_set, the set operations will have a time complexity of O(logN), resulting in a total time complexity of O(NlogN).
+In the worst case, if the set operations take O(N), the total time complexity would be approximately O(N2). 
+If we use a set instead of an unordered_set, the set operations will have a time complexity of O(logN), resulting in a total time complexity of O(NlogN).
 */
 ```
 
@@ -156,9 +161,177 @@ public:
 
 
 /*
-Time Complexity: O(N) or O(NxlogN) depending on the map data structure used, where N is the size of the array. For example, using an unordered_map in C++ gives a time complexity of O(N) (though in the worst case, unordered_map takes O(N) to find an element, making the time complexity O(N^2)). If we use a map data structure, the time complexity is O(NxlogN). The best case complexity is O(N) as we are traversing the array with a loop.
+Time Complexity: O(N) or O(NxlogN) depending on the map data structure used, where N is the size of the array. 
+For example, using an unordered_map in C++ gives a time complexity of O(N) (though in the worst case, unordered_map takes O(N) to find an element, making the time complexity O(N^2)). 
+If we use a map data structure, the time complexity is O(NxlogN). The best case complexity is O(N) as we are traversing the array with a loop.
 
 Space Complexity: O(N), since we are using a map data structure.
 */
 ```
+
+## Count subarrays with given sum
+
+Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
+
+Examples:
+
+```
+Input: nums = [1, 1, 1], k = 2
+
+Output: 2
+
+Explanation: In the given array [1, 1, 1], there are two subarrays that sum up to 2: [1, 1] and [1, 1]. Hence, the output is 2.
+```
+```
+Input: nums = [1, 2, 3], k = 3
+
+Output: 2
+
+Explanation: In the given array [1, 2, 3], there are two subarrays that sum up to 3: [1, 2] and [3]. Hence, the output is 2.
+```
+```
+Input: nums = [3, 1, 2, 4], k = 6
+Output: 2
+```
+Constraints:
+
+- 1 <= nums.length <= 10^5
+- -1000 <= nums[i] <= 1000
+- -10^7 <= k <= 10^7
+
+Solution:
+
+```cpp
+class Solution {
+   public:
+    int subarraySum(vector<int> &nums, int k) {
+        int n = nums.size();
+
+        map<int, int> prefixSumMap;
+
+        int subArrayWithSumK_count = 0, currentPrefixSum = 0;
+
+        // Setting 0 in the map.
+        prefixSumMap[0] = 1;
+
+        for (int i = 0; i < n; i++) {
+            // Add current element to the prefix sum:
+            currentPrefixSum += nums[i];
+
+            /*Calculate the value to
+            remove (currentPrefixSum - k)*/
+            int sumToRemove = currentPrefixSum - k;
+
+            /* Add the number of subarrays
+             with the sum to be removed*/
+            subArrayWithSumK_count += prefixSumMap[sumToRemove];
+
+            /* Update the count of current
+            prefix sum in the map*/
+            prefixSumMap[currentPrefixSum] += 1;
+        }
+        return subArrayWithSumK_count;
+    }
+};
+
+/*
+Time Complexity: O(N) or O(NxlogN) depending on the map data structure used, where N is the size of the array. 
+For example, if we use an unordered_map in C++, the time complexity will be O(N), but if we use a map, the time complexity will be O(NxlogN). 
+The minimum complexity is O(N) as we are using a single loop to traverse the array.
+
+Space Complexity: O(N) as we are using a map data structure.
+*/
+```
+
+## Count subarrays with given xor K
+
+Given an array of integers nums and an integer k, return the total number of subarrays whose XOR equals to k.
+
+Examples:
+```
+Input : nums = [4, 2, 2, 6, 4], k = 6
+
+Output : 4
+
+Explanation : The subarrays having XOR of their elements as 6 are [4, 2],  [4, 2, 2, 6, 4], [2, 2, 6], and [6]
+```
+```
+Input :nums = [5, 6, 7, 8, 9], k = 5
+
+Output : 2
+
+Explanation : The subarrays having XOR of their elements as 5 are [5] and [5, 6, 7, 8, 9]
+```
+```
+Input : nums = [5, 2, 9], k = 7
+Output: 1
+```
+
+Constraints:
+
+- 1 <= nums.length <= 10^5
+- 1 <= nums[i] <= 10^9
+- 1 <= k <= 10^9
+
+Solution:
+
+```cpp
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution
+{
+public:
+    int subarraysWithXorK(vector<int>& nums, int k)
+    {
+        int n = nums.size(); 
+        int xr = 0;
+        map<int, int> mpp; 
+        // setting the value of 0.
+        mpp[xr]++; 
+        int cnt = 0;
+
+        for (int i = 0; i < n; i++) {
+            // prefix XOR till index i:
+            xr = xr ^ nums[i];
+
+            // By formula: x = xr^k:
+            int x = xr ^ k;
+
+            // add the occurrence of xr^k to the count:
+            cnt += mpp[x];
+
+            // Insert the prefix xor till index i into the map:
+            mpp[xr]++;
+        }
+        return cnt;
+    }
+};
+
+int main()
+{
+    vector<int> a = {4, 2, 2, 6, 4};
+    int k = 6;
+
+    // Create an instance of the Solution class
+    Solution solution;
+
+    // Function call to get the result
+    int ans = solution.subarraysWithXorK(a, k);
+
+    cout << "The number of subarrays with XOR k is: " << ans << "\n";
+    return 0;
+}
+
+/*
+Time Complexity: O(N) or O(NxlogN), where N is the size of the array. If we use an unordered_map in C++, the time complexity is O(N). 
+However, with a map data structure, the time complexity is O(NxlogN). 
+In the worst case for an unordered_map, the searching time can increase to O(N), making the overall time complexity O(N2).
+
+Space Complexity: O(N), as we are using a map data structure.
+*/
+
+```
+
 
