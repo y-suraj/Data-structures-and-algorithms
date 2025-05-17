@@ -368,3 +368,128 @@ public:
 <p><strong>Space Complexity:</strong> O(1), as we are not using any extra space to solve this problem.</p>
 
 
+### First and last occurrence
+
+<p>Given an array of integers nums sorted in non-decreasing order, find the <strong>starting</strong> and <strong>ending</strong> position of a given target value. If the target is not found in the array, return [-1, -1].</p>
+
+Examples:
+```
+Input: nums = [5, 7, 7, 8, 8, 10], target = 8
+
+Output: [3, 4]
+
+Explanation:The target is 8, and it appears in the array at indices 3 and 4, so the output is [3,4]
+```
+```
+Input: nums = [5, 7, 7, 8, 8, 10], target = 6
+
+Output: [-1, -1]
+
+Expalantion: The target is 6, which is not present in the array. Therefore, the output is [-1, -1].
+```
+```
+Input: nums = [5, 7, 7, 8, 8, 10], target = 5
+Output:
+[0, 0]
+```
+
+Constraints:
+
+- 0 <= nums.length <= 10^5
+- -10^9 <= nums[i] <= 10^9
+- nums is a non-decreasing array.
+- -10^9 <= target <= 10^9
+
+Solution:
+
+```cpp
+class Solution
+{
+private:
+    // Function to find the first occurrence of the target
+    int firstOccurrence(vector<int> &nums, int target) {
+        int low = 0, high = nums.size() - 1;
+        int first = -1;
+
+        // Applying Binary Search Algorithm
+        while(low <= high) {
+            int mid = low + (high - low) / 2; 
+
+            /*  If the target element is found, we 
+                update the first variable to mid and
+                eliminate the right half to look for 
+                more smaller index where target is present */
+            if(nums[mid] == target) {
+                first = mid;
+                high = mid - 1;  
+            } 
+
+            /*  If middle element is smaller,
+                we eliminate the left half  */
+            else if(nums[mid] < target) {
+                low = mid + 1;  
+            } 
+            
+            /*  If middle element is greater,
+                we eliminate the right half  */
+            else {
+                high = mid - 1;  
+            }
+        }
+        return first;
+    }
+
+    // Function to find the last occurrence of the target
+    int lastOccurrence(vector<int> &nums, int target) {
+        int low = 0, high = nums.size() - 1;
+        int last = -1;
+
+        // Applying Binary Search Algorithm
+        while(low <= high) {
+            int mid = low + (high - low) / 2; 
+
+            /*  If the target element is found, we 
+                update the last variable to mid and
+                eliminate the left half to look for 
+                more greater index where target is present */
+            if(nums[mid] == target) {
+                last = mid;
+                low = mid + 1;
+            } 
+            
+            /*  If middle element is smaller,
+                we eliminate the left half  */
+            else if(nums[mid] < target) {
+                low = mid + 1;  
+            } 
+            
+            /*  If middle element is greater,
+                we eliminate the right half  */
+            else {
+                high = mid - 1; 
+            }
+        }
+        return last;
+    }
+
+public:
+    // Function to find the first and last occurrences of the target
+    vector<int> searchRange(vector<int> &nums, int target) {
+
+        // Function call to find the first occurence of target
+        int first = firstOccurrence(nums, target); 
+        
+        // If the target is not present in the array
+        if(first == -1) return {-1, -1};  
+
+        // Function call to find the last occurence of target
+        int last = lastOccurrence(nums, target);  
+
+        return {first, last};  
+    }
+};
+```
+
+<p><strong>Time Complexity:</strong> O(log N), where N is the size of the given array. Both the <code>firstOccurrence</code> and <code>lastOccurrence</code> functions perform a binary search, which operates in logarithmic time. Thus, the overall time complexity is O(log N).</p>
+<p><strong>Space Complexity:</strong> O(1), as we are using a constant amount of extra space regardless of the input size. The space used by the variables <code>low</code>, <code>high</code>, <code>mid</code>, <code>first</code>, and <code>last</code> does not depend on the size of the input array.</p>
+
