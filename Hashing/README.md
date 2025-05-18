@@ -334,4 +334,143 @@ Space Complexity: O(N), as we are using a map data structure.
 
 ```
 
+## Extras
 
+### [3551. Minimum Swaps to Sort by Digit Sum](https://leetcode.com/problems/minimum-swaps-to-sort-by-digit-sum/description/)
+
+<div class="elfjS" data-track-load="description_content"><p>You are given an array <code>nums</code> of <strong>distinct</strong> positive integers. You need to sort the array in <strong>increasing</strong> order based on the sum of the digits of each number. If two numbers have the same digit sum, the <strong>smaller</strong> number appears first in the sorted order.</p>
+
+<p>Return the <strong>minimum</strong> number of swaps required to rearrange <code>nums</code> into this sorted order.</p>
+
+<p>A <strong>swap</strong> is defined as exchanging the values at two distinct positions in the array.</p>
+
+<p>&nbsp;</p>
+<p><strong class="example">Example 1:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">nums = [37,100]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">1</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<ul>
+	<li>Compute the digit sum for each integer: <code>[3 + 7 = 10, 1 + 0 + 0 = 1] → [10, 1]</code></li>
+	<li>Sort the integers based on digit sum: <code>[100, 37]</code>. Swap <code>37</code> with <code>100</code> to obtain the sorted order.</li>
+	<li>Thus, the minimum number of swaps required to rearrange <code>nums</code> is 1.</li>
+</ul>
+</div>
+
+<p><strong class="example">Example 2:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">nums = [22,14,33,7]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">0</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<ul>
+	<li>Compute the digit sum for each integer: <code>[2 + 2 = 4, 1 + 4 = 5, 3 + 3 = 6, 7 = 7] → [4, 5, 6, 7]</code></li>
+	<li>Sort the integers based on digit sum: <code>[22, 14, 33, 7]</code>. The array is already sorted.</li>
+	<li>Thus, the minimum number of swaps required to rearrange <code>nums</code> is 0.</li>
+</ul>
+</div>
+
+<p><strong class="example">Example 3:</strong></p>
+
+<div class="example-block">
+<p><strong>Input:</strong> <span class="example-io">nums = [18,43,34,16]</span></p>
+
+<p><strong>Output:</strong> <span class="example-io">2</span></p>
+
+<p><strong>Explanation:</strong></p>
+
+<ul>
+	<li>Compute the digit sum for each integer: <code>[1 + 8 = 9, 4 + 3 = 7, 3 + 4 = 7, 1 + 6 = 7] → [9, 7, 7, 7]</code></li>
+	<li>Sort the integers based on digit sum: <code>[16, 34, 43, 18]</code>. Swap <code>18</code> with <code>16</code>, and swap <code>43</code> with <code>34</code> to obtain the sorted order.</li>
+	<li>Thus, the minimum number of swaps required to rearrange <code>nums</code> is 2.</li>
+</ul>
+</div>
+<p>&nbsp;</p>
+<p><strong>Constraints:</strong></p>
+
+<ul>
+	<li><code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code></li>
+	<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
+	<li><code>nums</code> consists of <strong>distinct</strong> positive integers.</li>
+</ul>
+</div>
+
+**Solution:**
+```cpp
+class Solution {
+public:
+    int digitSum(int n) {
+        int sum = 0;
+
+        while (n != 0) {
+            int rem = n % 10;
+            sum += rem;
+            n /= 10;
+        }
+        return sum;
+    }
+    int minSwaps(vector<int>& nums) {
+        int n = nums.size();
+
+        // Step 1: Pair each number with its digit sum
+        vector<pair<int, int>> digitSumAndValue;
+        for (int num : nums) {
+            digitSumAndValue.push_back({digitSum(num), num});
+        }
+
+        // Step 2: Sort by digit sum, and by value if digit sums are equal
+        sort(digitSumAndValue.begin(), digitSumAndValue.end(),
+             [](pair<int, int>& a, pair<int, int>& b) {
+                 if (a.first != b.first)
+                     return a.first < b.first;
+                 return a.second < b.second;
+             });
+
+        // Step 3: Build the target sorted array
+        vector<int> sortedNums;
+        for (auto& p : digitSumAndValue) {
+            sortedNums.push_back(p.second);
+        }
+
+        // Step 4: Create a map from value to its index in the original array
+        unordered_map<int, int> valueToIndex;
+        for (int i = 0; i < n; ++i) {
+            valueToIndex[nums[i]] = i;
+        }
+
+        // Step 5: Count minimum number of swaps via cycle detection
+        vector<bool> visited(n, false);
+        int swaps = 0;
+
+        for (int i = 0; i < n; ++i) {
+            if (visited[i] || nums[i] == sortedNums[i])
+                continue;
+
+            int cycleSize = 0;
+            int j = i;
+
+            while (!visited[j]) {
+                visited[j] = true;
+                j = valueToIndex[sortedNums[j]];
+                ++cycleSize;
+            }
+
+            if (cycleSize > 1) {
+                swaps += (cycleSize - 1);
+            }
+        }
+
+        return swaps;
+    }
+};
+```
+**Time Complexity**: O(n log n)
+
+**Space Complexity**: O(n)
