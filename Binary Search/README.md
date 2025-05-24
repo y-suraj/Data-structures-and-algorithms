@@ -961,3 +961,80 @@ int main() {
 
 ## On answers
 
+### Find square root of a number
+Given a positive integer n. Find and return its square root. If n is not a perfect square, then return the floor value of sqrt(n).
+
+Examples:
+```
+Input: n = 36
+
+Output: 6
+
+Explanation: 6 is the square root of 36.
+```
+```
+Input: n = 28
+
+Output: 5
+
+Explanation: The square root of 28 is approximately 5.292. So, the floor value will be 5.
+```
+```
+Input: n=50
+Output:
+7
+```
+
+Constraints:
+
+- 0 <= n <= 2^31 - 1
+
+Solution:
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    /* Function to compute the floor of
+       square root of a given integer */
+    long long floorSqrt(long long n) {
+        long long low = 1, high = n;
+        
+        // Binary search on the answer space
+        while (low <= high) {
+            long long mid = (low + high) / 2;
+            long long val = mid * mid;
+            
+            // Check if val is less than or equal to n
+            if (val <= (long long)(n)) {
+                // Move to the right part
+                low = mid + 1;
+            } else {
+                // Move to the left part
+                high = mid - 1;
+            }
+        }
+        
+        // Return the floor of square root
+        return high;
+    }
+};
+
+int main() {
+    int n = 28;
+    
+    // Create an object of the Solution class
+    Solution sol;
+    
+    int ans = sol.floorSqrt(n);
+    
+    // Print the result
+    cout << "The floor of square root of " << n
+         << " is: " << ans << "\n";
+    
+    return 0;
+}
+```
+
