@@ -1143,4 +1143,11 @@ int main() {
 }
 ```
 
+**Complexity Analysis:**
+
+***Time Complexity:*** O(logM * logN)
+The binary search on the search space (of size M) takes O(logM) and the helper function takes O(logN) taking overall O(logM * logN).
+
+***Space Complexity:*** O(1), as there are only a couple of variables used. 
+
 
