@@ -704,7 +704,7 @@ int main() {
 }
 ```
 
-<h3><strong>Complexity Analysis:&nbsp;</strong></h3>
+<strong>Complexity Analysis:&nbsp;</strong>
 <p><strong>Time Complexity:</strong>O(logN) for the best and average cases.  As in the best and average scenarios, the binary search algorithm is primarily used and hence the time complexity is O(logN). <br>
 However, in the worst-case scenario, it'll be O(N/2) where all array elements are the same but not the target (e.g., given array = {3, 3, 3, 3, 3, 3, 3}), we continue to reduce the search space by adjusting the low and high pointers until they intersect, which will end up taking O(N/2) time complexity.</p>
 <p><strong>Space Complexity:</strong>O(1), as we are not using any extra space to solve this problem.</p>
@@ -779,7 +779,7 @@ class Solution {
 };
 ```
 
-<h3><strong>Complexity Analysis:&nbsp;</strong></h3>
+<strong>Complexity Analysis:&nbsp;</strong>
 
 <strong>Time Complexity:</strong> O(log(N)), where N is size of the array. Because binary search is being used.
 
@@ -857,7 +857,7 @@ class Solution {
 };
 ```
 
-<h3><strong>Complexity Analysis:&nbsp;</strong></h3>
+<strong>Complexity Analysis:&nbsp;</strong>
 
 <strong>Time Complexity:</strong> O(N), where N is size of the array. As the array is being traversed only once using a single loop.
 
@@ -952,7 +952,7 @@ int main() {
 }
 ```
 
-<h3><strong>Complexity Analysis:&nbsp;</strong></h3>
+<strong>Complexity Analysis:&nbsp;</strong>
 
 <strong>Time Complexity:</strong> O(logN), N is size of the given array. We are basically using the Binary Search algorithm.
 
@@ -1037,4 +1037,110 @@ int main() {
     return 0;
 }
 ```
+
+### Find Nth root of a number
+<p>Given two numbers N and M, find the <strong>Nth</strong> root of M. The Nth root of a number M is defined as a number X such that when X is raised to the power of N, it equals M. If the Nth root is not an integer, return -1.</p>
+
+Examples:
+
+```
+Input: N = 3, M = 27
+
+Output: 3
+
+Explanation: The cube root of 27 is equal to 3.
+```
+```
+Input: N = 4, M = 69
+
+Output:-1
+
+Explanation: The 4th root of 69 does not exist. So, the answer is -1.
+```
+```
+Input: N = 4, M = 81
+Output:
+3
+```
+
+Constraints:
+
+- 1 <= N <= 30
+- 1 <= M <= 10^9
+
+**Solution:**
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+private:
+    /* Function to calculate power using
+    exponentiation by squaring method*/
+    int helperFunc(int mid, int n, int m) {
+        long long ans = 1, base = mid;
+        
+        while (n > 0) {
+            if (n % 2) {
+                ans = ans * base;
+                if (ans > m) return 2;  // Early exit
+                n--;
+            } 
+            else {
+                n /= 2;
+                base = base * base;
+                if(base > m) return 2;
+            }
+        }
+        if (ans == m) return 1;
+        return 0;
+    }
+
+    
+public:
+    // Function to find the Nth root of M
+    int NthRoot(int N, int M) {
+        // Binary search on the answer space
+        int low = 1, high = M;
+        
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int midN = helperFunc(mid, N, M);
+            
+            if (midN == 1) {
+                
+                // Return mid if mid^N== M
+                return mid;
+            } 
+            else if (midN == 0) {
+                // Move to the right half if mid^N < M
+                low = mid + 1;
+            } 
+            else {
+                // Move to the left half if mid^N > M
+                high = mid - 1;
+            }
+        }
+        // Return -1 if no nth root found
+        return -1;
+    }
+};
+
+int main() {
+    int n = 3, m = 27;
+    
+    // Create an object of the Solution class
+    Solution sol;
+    
+    // Function call to find the Nth root of M
+    int ans = sol.NthRoot(n, m);
+    
+    // Print the result
+    cout << "The answer is: " << ans << "\n";
+    
+    return 0;
+}
+```
+
 
