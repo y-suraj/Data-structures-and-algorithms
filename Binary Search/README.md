@@ -1151,3 +1151,176 @@ The binary search on the search space (of size M) takes O(logM) and the helper f
 ***Space Complexity:*** O(1), as there are only a couple of variables used. 
 
 
+### Find the smallest divisor
+
+Given an array of integers nums and an integer limit as the threshold value, find the **smallest positive integer** divisor such that upon dividing all the elements of the array by this divisor, the sum of the division results is less than or equal to the threshold value.
+
+Each result of the division is rounded up to the nearest integer greater than or equal to that element.
+
+Examples:
+```
+Input: nums = [1, 2, 3, 4, 5], limit = 8
+
+Output: 3
+
+Explanation: We can get a sum of 15(1 + 2 + 3 + 4 + 5) if we choose 1 as a divisor. 
+
+The sum is 9(1 + 1 + 2 + 2 + 3) if we choose 2 as a divisor. Upon dividing all the elements of the array by 3, we get 1,1,1,2,2 respectively. Now, their sum is equal to 7 <= 8 i.e. the threshold value. So, 3 is the minimum possible answer.
+```
+```
+Input: nums = [8,4,2,3], limit = 10
+
+Output: 2
+
+Explanation: If we choose 1, we get 17 as the sum. If we choose 2, we get 9 (4+2+1+2) <= 10 as the answer. So, 2 is the answer.
+```
+```
+Input: nums = [8,4,2,3], limit = 4
+Output:
+8
+```
+
+Constraints:
+
+- 1 <= nums.length <= 5 * 10^4
+- 1 <= nums[i] <= 10^6
+- nums.length <= limit <= 10^6
+
+**Solution**
+```cpp
+class Solution {
+   private:
+   /* Helper function to find the
+   summation of division values */
+    int sumByD(vector<int>& nums, int limit) {
+        // size of array
+        int n = nums.size();
+
+        // find the summation of division values
+        int sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += ceil((double)(nums[i]) / (double)(limit));
+        }
+        return sum;
+    }
+
+   public:
+   // function to find the smallest divisor
+    int smallestDivisor(vector<int>& nums, int limit) {
+        int n = nums.size();
+        if (n > limit) return -1;
+
+        // initialize binary search bounds
+        int low = 1, high = *max_element(nums.begin(), nums.end());
+
+        // apply binary search
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            if (sumByD(nums, mid) <= limit) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+};
+```
+
+**Complexity Analysis:**
+
+<strong>Time Complexity:</strong> O(log(max)*N), where max is the  maximum element in the array, N is size of the array. 
+
+<li>We are applying binary search on our answers that are in the range of [1, max]. For every possible divisor ‘mid’, calling the sumByD() function. Inside that function, traversing the entire array, which results in O(N).<br><br>
+<strong>Space Complexity:</strong> As no additional space is used, so the Space Complexity is O(1).</li>
+
+
+### Koko eating bananas
+
+<p><p>A monkey is given n piles of bananas, where the 'ith' pile has nums[i] bananas. An integer h represents the total time in hours to eat all the bananas.</p><p></p><p>Each hour, the monkey chooses a non-empty pile of bananas and eats k bananas. If the pile contains fewer than k bananas, the monkey eats all the bananas in that pile and does not consume any more bananas in that hour.</p><p></p><p>Determine the <strong>minimum</strong> number of bananas the monkey must eat per hour to finish all the bananas within h hours.</p></p>
+
+**Examples:**
+```
+Input: n = 4, nums = [7, 15, 6, 3], h = 8
+
+Output: 5
+
+Explanation: If Koko eats 5 bananas/hr, he will take 2, 3, 2, and 1 hour to eat the piles accordingly. So, he will take 8 hours to complete all the piles.  
+```
+```
+Input: n = 5, nums = [25, 12, 8, 14, 19], h = 5
+
+Output: 25
+
+Explanation: If Koko eats 25 bananas/hr, he will take 1, 1, 1, 1, and 1 hour to eat the piles accordingly. So, he will take 5 hours to complete all the piles.
+```
+```
+Input: n = 4, nums = [3, 7, 6, 11], h = 8
+Output:
+4
+```
+
+Constraints:
+
+- 1 <= n <= 10^4
+- n <= h <= 10^9
+- 1 <= nums[i] <= 10^9
+
+
+**Solution**
+```cpp
+class Solution {
+   public:
+   /* Helper function to find the 
+   maximum element in the vector */
+    int findMax(vector<int>& nums, int n) {
+        int maxNum = INT_MIN;
+
+        // find the maximum
+        for (int i = 0; i < n; i++) {
+            maxNum = max(maxNum, nums[i]);
+        }
+        return maxNum;
+    }
+    /* Helper function to calculate total 
+    hours required at given hourly rate */
+    long long calculateTotalHours(vector<int>& v, int hourly) {
+        long long totalH = 0;
+        int n = v.size();
+
+        // calculate total hours required
+        for (int i = 0; i < n; i++) {
+            totalH += ceil((double)v[i] / (double)hourly);
+        }
+        return totalH;
+    }
+    /* Function to find the 
+    minimum rate to eat bananas */
+    int minimumRateToEatBananas(vector<int> nums, int h) {
+        int n = nums.size();
+        // Initialize binary search bounds
+        int low = 1, high = findMax(nums, n);
+
+        // apply binary search
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            long long totalH = calculateTotalHours(nums, mid);
+            if (totalH <= h) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
+    }
+};
+```
+
+**Complexity Analysis:**
+
+<strong>Time Complexity:</strong> O(N * log(max)), where max is the maximum element in the array and N is size of the array. We are applying Binary search for the range [1, max], and for every value of ‘mid’, we are traversing the entire array inside the function named calculateTotalHours().
+
+<strong>Space Complexity:</strong>  As no additional space is used, so the Space Complexity is O(1).
+
+
